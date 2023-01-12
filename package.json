@@ -1,0 +1,22 @@
+{
+  "name": "lunoprem",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiju10/lunoPremium.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wiju10/lunoPremium/issues"
+  },
+  "homepage": "https://github.com/wiju10/lunoPremium#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  }
+}
