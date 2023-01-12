@@ -17,9 +17,10 @@ async function getPrice() {
 
 async function getRateUSDMYR() {  
   const res1 = await fetch("https://api.apilayer.com/fixer/convert?to=MYR&from=USD&amount=1", requestOptions)
-  .then(response => response.json())
+  .then(response => response.json())  //would not work earlier because response.json was response.text and was returning string instead of object
   .then(result => console.log('USDMYR:                ' + result.info.rate))
 }
+
 
 getPrice()
 getRateUSDMYR()
