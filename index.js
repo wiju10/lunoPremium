@@ -28,16 +28,43 @@ async function getRateUSDMYR() {
   return res.info.rate
 }
 
-
-async function main() {
-  const price = await getPrice()
-  console.log(price)
-}
-
 async function convertCoinXR() {
   let priceUSD = await getPrice()
   let USDMYRRate = await getRateUSDMYR()
-  console.log(priceUSD / USDMYRRate)
+  let lunoBTCUSD = priceUSD / USDMYRRate
+  console.log('BTCUSD price on Luno:  USD' + priceUSD / USDMYRRate)
+  return lunoBTCUSD  
 }
 
-convertCoinXR()
+async function main() {
+  const price = await getPrice()
+  const myrRate = await getRateUSDMYR()
+  console.log("BTCMYR price on Luno:  MYR" + price)
+  console.log("USDMYR:                " + myrRate)
+}
+
+
+async function getBTCBUSD() {
+  const Binance = require('node-binance-api');
+  const binance = new Binance()
+  let ticker = await binance.prices('BTCBUSD')
+  console.info("BTCBUSD price on Binance: USD", ticker.BTCBUSD)
+  return +ticker.BTCBUSD
+  //arrow method
+  // binance.prices('BTCBUSD', (error, ticker) => {
+  //   console.info("BTCBUSD price on Binance: USD", ticker.BTCBUSD);
+  // });
+
+}
+
+async function priceDiff() {
+  let LBTCUSD = await convertCoinXR()
+  let BBTCUSD = await getBTCBUSD()
+  console.log("Price difference:  USD" + (LBTCUSD - BBTCUSD))
+  console.log("Luno premium:  " + (((LBTCUSD - BBTCUSD) / LBTCUSD) * 100) + "%")
+}
+
+
+priceDiff()
+main()
+
