@@ -8,6 +8,6 @@ global.fetch = jest.fn(() => Promise.resolve({
 
 import { getUsdtoMyrRate } from '../lib/utils.js'
 
-test("Returns Message for Failed Luno Response", async () => {
+test("Returns Message for Failed Exchange rate Response", async () => {
   expect(await getUsdtoMyrRate()).toBe("Failed to retrieve exchange rate");
 });
