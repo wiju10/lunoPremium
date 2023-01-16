@@ -1,2 +1,12 @@
 Use fetch
 forex service
+
+------------------------------------------------------------------------------------
+walkthrough
+API
+call the .json value if you dont want the whole thing
+
+IIFE
+(async () => {
+  console.log(await getlunoPrice())
+})
