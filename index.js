@@ -1,70 +1,26 @@
-require('dotenv').config();
-
-var myHeaders = new Headers();
-myHeaders.append("apikey", process.env.APILAYER_KEY); 
-
-var requestOptions = {
-  method: 'GET',
-  redirect: 'follow',
-  headers: myHeaders
-};
-
-async function getPrice() {
-  const res1 = await fetch("https://api.luno.com/api/1/ticker?pair=XBTMYR")
-  const res = await res1.json()
-  return +res.last_trade
-}
-
-// async function getRateUSDMYR() {  
-//   const res1 = await fetch("https://api.apilayer.com/fixer/convert?to=MYR&from=USD&amount=1", requestOptions)
-//   .then(response => response.json())  //would not work earlier because response.json was response.text and was returning string instead of object
-//   // .then(result => console.log('USDMYR:                ' + result.info.rate))
-//   .then(result => console.log(typeof result.info.rate))
-// }
-
-async function getRateUSDMYR() {  
-  const res1 = await fetch("https://api.apilayer.com/fixer/convert?to=MYR&from=USD&amount=1", requestOptions)
-  const res = await res1.json()
-  return res.info.rate
-}
-
-async function convertCoinXR() {
-  let priceUSD = await getPrice()
-  let USDMYRRate = await getRateUSDMYR()
-  let lunoBTCUSD = priceUSD / USDMYRRate
-  console.log('BTCUSD price on Luno:  USD' + priceUSD / USDMYRRate)
-  return lunoBTCUSD  
-}
+import dotenv from 'dotenv'
+dotenv.config()
+import binance from './lib/binance.js'
+import luno from './lib/luno.js'
+import { getUsdtoMyrRate } from './lib/utils.js'
+import { convertCoinXR } from './lib/utils.js'
+import { calcPremium } from './lib/utils.js'
+import { priceDiff } from './lib/utils.js'
 
 async function main() {
-  const price = await getPrice()
-  const myrRate = await getRateUSDMYR()
-  console.log("BTCMYR price on Luno:  MYR" + price)
-  console.log("USDMYR:                " + myrRate)
+  const lunoPriceInMyr = await luno.getLunoMyrPrice()
+  const binancePriceInUsd = await binance.getBTCBUSD()
+  const er = await getUsdtoMyrRate()
+  const lunoPriceInUsd = await convertCoinXR(lunoPriceInMyr, er)
+  const diff = await priceDiff(lunoPriceInUsd, binancePriceInUsd)
+  const premium = await calcPremium(lunoPriceInUsd, binancePriceInUsd)
+
+  console.log("BTCMYR price on Luno:".padEnd(30, ' ') + `MYR ${lunoPriceInMyr}`)
+  console.log("USDMYR:".padEnd(30, ' ') + er)
+  console.log("BTCUSD price on Luno:".padEnd(30, ' ') + `USD ${lunoPriceInUsd}`)
+  console.log("BTCBUSD price on Binance:".padEnd(30, ' ') + `USD${binancePriceInUsd}`)
+  console.log("Price difference:".padEnd(30, ' ') + `USD${diff}`)
+  console.log("Luno Premium:".padEnd(30, ' ') + premium)
 }
 
-
-async function getBTCBUSD() {
-  const Binance = require('node-binance-api');
-  const binance = new Binance()
-  let ticker = await binance.prices('BTCBUSD')
-  console.info("BTCBUSD price on Binance: USD", ticker.BTCBUSD)
-  return +ticker.BTCBUSD
-  //arrow method
-  // binance.prices('BTCBUSD', (error, ticker) => {
-  //   console.info("BTCBUSD price on Binance: USD", ticker.BTCBUSD);
-  // });
-
-}
-
-async function priceDiff() {
-  let LBTCUSD = await convertCoinXR()
-  let BBTCUSD = await getBTCBUSD()
-  console.log("Price difference:  USD" + (LBTCUSD - BBTCUSD))
-  console.log("Luno premium:  " + (((LBTCUSD - BBTCUSD) / LBTCUSD) * 100) + "%")
-}
-
-
-priceDiff()
 main()
-
