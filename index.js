@@ -18,8 +18,8 @@ async function main() {
   console.log("BTCMYR price on Luno:".padEnd(30, ' ') + `MYR ${lunoPriceInMyr}`)
   console.log("USDMYR:".padEnd(30, ' ') + er)
   console.log("BTCUSD price on Luno:".padEnd(30, ' ') + `USD ${lunoPriceInUsd}`)
-  console.log("BTCBUSD price on Binance:".padEnd(30, ' ') + `USD${binancePriceInUsd}`)
-  console.log("Price difference:".padEnd(30, ' ') + `USD${diff}`)
+  console.log("BTCBUSD price on Binance:".padEnd(30, ' ') + `USD ${binancePriceInUsd}`)
+  console.log("Price difference:".padEnd(30, ' ') + `USD ${diff}`)
   console.log("Luno Premium:".padEnd(30, ' ') + premium)
 }
 
