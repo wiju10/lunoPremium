@@ -6,6 +6,7 @@ import { getUsdtoMyrRate } from './lib/utils.js'
 import { convertCoinXR } from './lib/utils.js'
 import { calcPremium } from './lib/utils.js'
 import { priceDiff } from './lib/utils.js'
+export { main }
 
 async function main() {
   const lunoPriceInMyr = await luno.getLunoMyrPrice()
